@@ -1,9 +1,10 @@
 package com.jun.chatapp.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class MessageModel {
+@NoArgsConstructor
+public class Message {
 	private String message;
-	private String fromLogin;
 }
