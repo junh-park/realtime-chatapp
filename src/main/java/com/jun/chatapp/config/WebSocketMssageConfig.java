@@ -1,10 +1,14 @@
 package com.jun.chatapp.config;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-public class WebSocketMssagConfig implements WebSocketMessageBrokerConfigurer {
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebSocketMssageConfig implements WebSocketMessageBrokerConfigurer {
 
 	//creates in-memory message broker with one+ destination for sending and receiving messages
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
@@ -14,7 +18,9 @@ public class WebSocketMssagConfig implements WebSocketMessageBrokerConfigurer {
 	
 	//used to filter destination handled by methods annotated with @MessageMapping which you implement in controller
 	//after processing the message, the controller will send it to the broker
+	//"/mychatapplication" is the HTTP URL for the endpoint to which a WebSocket(or SockJs) client will need to connect to
+	//for the WebSocket handshake
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/chat").setAllowedOriginPatterns("httplocalhost:3000").withSockJS();
+		registry.addEndpoint("/mychatapplication").withSockJS();
 	}
 }
