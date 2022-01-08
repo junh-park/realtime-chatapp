@@ -1,0 +1,155 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body, html {
+	height: 100%;
+	font-family: Poppins-Regular, sans-serif;
+    background: -moz-linear-gradient(-135deg, #c850c0, #4158d0);
+    background: linear-gradient(-135deg, #c850c0, #4158d0);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    margin: 0;
+    padding: 15px;
+
+}
+
+.wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    min-width: 70vw;
+    min-height: 100vh;
+}
+
+.login-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    border: 2px solid rgb(207, 86, 86);
+    border-radius: 25px;
+    width: 60%;
+    height: 500px;
+    background: white;
+}
+
+.login-form .welcome-message  {
+    flex: 40% ;
+}
+
+@media only screen and (max-width: 1150px) {
+    .login-form {
+        display: flex;
+        flex-direction: row;
+        
+    }
+    .login-form .welcome-message {
+        flex: 10%;
+    }
+
+    .login-form .form-body {
+        flex: 90%;
+    }
+}
+
+.login-form .form-body {
+    flex: 60%;
+}
+
+.welcome-message {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.welcome-message > h1 {
+    font-size: 1.5em;
+}
+
+.form-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-wrap {
+    gap: 25px;
+}
+
+.login-header {
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.wrap100 {
+    position: relative;
+    width: 100%;
+    z-index: 1;
+    margin-bottom: 10px;
+}
+
+.symbol-input100 {
+    font-size: 15px;
+
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    border-radius: 25px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding-left: 35px;
+    pointer-events: none;
+    color: #666666;
+  
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;   
+}
+
+.input-form {
+    font-family: Poppins-Medium;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #666666;
+  
+    display: block;
+    width: 100%;
+    background: #e6e6e6;
+    height: 50px;
+    border-radius: 25px;
+    padding: 0 30px 0 68px;
+}
+
+button {
+    width: 100%;
+    border-radius: 25px;
+}
+
+input {
+	outline: none;
+	border: none;
+}
+
+textarea {
+    outline: none;
+    border: none;
+}
+
+textarea:focus, input:focus {
+    border-color: transparent !important;
+}

@@ -1,30 +1,26 @@
 package com.jun.chatapp.controller;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import com.jun.chatapp.model.MessageModel;
-
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+
+import com.jun.chatapp.model.MessageModel;
 
 @Controller
 public class MessageController {
-
     @MessageMapping("/messages")
 //    @SendTo("/topic/chat.messages")
-    public String broadcastMessage(@Payload MessageModel message) {
-        return message.getMessageContent();
-
+    public MessageModel broadcastMessage(@Payload MessageModel message) {
+    	MessageModel messageModel = new MessageModel();
+    	messageModel.setMessageContent(addTimestamp() + message.getMessageContent());
+    	return messageModel;
     }
 
-    private String getTimestamp() {
+    private String addTimestamp() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
-        String timeNow = formatter.format(LocalDateTime.now());
-        System.out.println(timeNow);
-        return timeNow;
+        return new StringBuilder().append("[").append(formatter.format(LocalDateTime.now())).append("]: ").toString(); 
     }
 }

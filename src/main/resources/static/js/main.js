@@ -12,9 +12,10 @@ $(document).ready(() => {
 function connect() {
     var socket = new SockJS('/mychatapplication')
     stompClient = Stomp.over(socket)
-    stompClient.connect({}, (frame) => {
+    stompClient.connect({}, () => {
         stompClient.subscribe('/topic/messages', (message) => {
-            showMessage(JSON.parse(message.body).content)
+            showMessage(JSON.parse(message.body).messageContent)
+            $("#message").val('')
         })
     })
 }
@@ -26,5 +27,4 @@ function showMessage(message) {
 function sendMessage() {
     stompClient.send("/app/messages", {}, JSON.stringify({'messageContent': $("#message").val()}))
 }
-
 
