@@ -10,17 +10,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDetailsModel implements UserDetails {
-
+	
+	@NonNull
 	private User user;
-	private List<GrantedAuthority> GRANTED_AUTHORITIES;
 
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return GRANTED_AUTHORITIES;
+		return null;
 	}
 
 	public boolean isAccountNonExpired() {

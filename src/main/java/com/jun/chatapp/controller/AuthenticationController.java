@@ -34,7 +34,7 @@ public class AuthenticationController {
 
 	@GetMapping("/chat")
 	public String chat() {
-		return "chat.html";
+		return "chat";
 	}
 	
 }
