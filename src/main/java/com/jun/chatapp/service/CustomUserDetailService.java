@@ -10,19 +10,16 @@ import org.springframework.stereotype.Service;
 import com.jun.chatapp.model.UserEntity;
 import com.jun.chatapp.repository.UserRepository;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
 	
-	@NonNull 
-	private UserRepository userRepo;
-
+	private final UserRepository userRepo;
+	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Optional<UserEntity> user = userRepo.findByUsername(username);
-		new UserEntity();
 		return user.orElseThrow(() -> 
 			new UsernameNotFoundException("Please check your credentials again"));
 	}

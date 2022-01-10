@@ -1,19 +1,21 @@
 package com.jun.chatapp.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -28,34 +30,30 @@ public class UserEntity implements UserDetails {
 	private String username;
 	@NotNull @NonNull
 	private String password;
-	
-	private boolean accountNonExpired;
-	private boolean accountNonLocked;
-	private boolean credentialNonExpired;
+	@OneToMany(targetEntity = Roles.class, fetch = FetchType.EAGER)
+	private Set<Roles> authorities = new HashSet<>();
 	private boolean enabled;
 	
-	public UserEntity(@NotNull String username, String password) {
+	public UserEntity(String username, String password) {
 		this.username = username;
 		this.password = password;
+		this.enabled = true;
 	}
 	
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return new ArrayList<>();
+		return authorities;
 	}
 	
-	@Override
+	//Since enabled takes higher order place, automatically updates other validations at the same time
 	public boolean isAccountNonExpired() {
-		return accountNonExpired;
+		return enabled;
 	}
-	@Override
 	public boolean isAccountNonLocked() {
-		return accountNonLocked;
+		return enabled;
 	}
-	@Override
 	public boolean isCredentialsNonExpired() {
-		return credentialNonExpired;
+		return enabled;
 	}
-	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
