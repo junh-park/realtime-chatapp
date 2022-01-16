@@ -7,7 +7,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 
-import com.jun.chatapp.model.MessageModel;
+import com.jun.chatapp.domain.dto.MessageModel;
 
 @Controller
 public class MessageController {

@@ -37,22 +37,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		
 		http
 			.authorizeRequests()
-				.antMatchers("/", "/login.html").permitAll()
+				.antMatchers("/", "/login**").permitAll()
 				.anyRequest().authenticated()
 			.and()
 			.formLogin()
-				.loginPage("/login.html")
-//				.loginProcessingUrl("/login")
-				.defaultSuccessUrl("/chat.html", true)
 			.and()
 			.logout()
 				.deleteCookies("JSESSIONID")
 				.permitAll();
 	}
 	
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring()
-			.antMatchers("/static/**", "/css/**", "/js/**");
-	}
-	
+//	public void configure(WebSecurity web) throws Exception {
+//		web.ignoring()
+//			.antMatchers("/static/**", "/css/**", "/js/**");
+//	}
 }

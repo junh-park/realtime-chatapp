@@ -3,7 +3,7 @@ package com.jun.chatapp.service;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import com.jun.chatapp.model.MessageModel;
+import com.jun.chatapp.domain.dto.MessageModel;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,14 +1,16 @@
-package com.jun.chatapp.model;
+package com.jun.chatapp.domain.entity;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -30,8 +32,9 @@ public class UserEntity implements UserDetails {
 	private String username;
 	@NotNull @NonNull
 	private String password;
-	@OneToMany(targetEntity = Roles.class, fetch = FetchType.EAGER)
-	private Set<Roles> authorities = new HashSet<>();
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "user_id")
+	private Set<Authority> authorities = new HashSet<>();
 	private boolean enabled;
 	
 	public UserEntity(String username, String password) {

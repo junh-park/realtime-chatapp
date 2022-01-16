@@ -2,12 +2,13 @@ package com.jun.chatapp.service;
 
 import java.util.Optional;
 
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.jun.chatapp.model.UserEntity;
+import com.jun.chatapp.domain.entity.UserEntity;
 import com.jun.chatapp.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,8 @@ public class CustomUserDetailService implements UserDetailsService {
 	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Optional<UserEntity> user = userRepo.findByUsername(username);
+		
+		User user2 = new org.springframework.security.core.userdetails.User(username, username, null);
 		return user.orElseThrow(() -> 
 			new UsernameNotFoundException("Please check your credentials again"));
 	}
