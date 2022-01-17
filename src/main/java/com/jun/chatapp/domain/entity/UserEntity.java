@@ -1,5 +1,6 @@
 package com.jun.chatapp.domain.entity;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,18 +14,20 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Entity @Table(name = "USER")
-@Data @NoArgsConstructor
-public class UserEntity implements UserDetails {
+@Data @NoArgsConstructor @AllArgsConstructor
+public class UserEntity implements UserDetails, Serializable {
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -32,6 +35,10 @@ public class UserEntity implements UserDetails {
 	private String username;
 	@NotNull @NonNull
 	private String password;
+	private String firstName;
+	private String lastName;
+	@Email
+	private String email;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "user_id")
 	private Set<Authority> authorities = new HashSet<>();
@@ -51,12 +58,15 @@ public class UserEntity implements UserDetails {
 	public boolean isAccountNonExpired() {
 		return enabled;
 	}
+	
 	public boolean isAccountNonLocked() {
 		return enabled;
 	}
+	
 	public boolean isCredentialsNonExpired() {
 		return enabled;
 	}
+	
 	public boolean isEnabled() {
 		return enabled;
 	}

@@ -7,14 +7,14 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 
-import com.jun.chatapp.domain.dto.MessageModel;
+import com.jun.chatapp.domain.dto.MessageDto;
 
 @Controller
 public class MessageController {
     @MessageMapping("/messages")
 //    @SendTo("/topic/chat.messages")
-    public MessageModel broadcastMessage(@Payload MessageModel message) {
-    	MessageModel messageModel = new MessageModel();
+    public MessageDto broadcastMessage(@Payload MessageDto message) {
+    	MessageDto messageModel = new MessageDto();
     	messageModel.setMessageContent(addTimestamp() + message.getMessageContent());
     	return messageModel;
     }
