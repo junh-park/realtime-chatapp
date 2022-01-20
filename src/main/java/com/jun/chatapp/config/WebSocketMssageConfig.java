@@ -25,6 +25,6 @@ public class WebSocketMssageConfig implements WebSocketMessageBrokerConfigurer {
 	//"/mychatapplication" is the HTTP URL for the endpoint to which a WebSocket(or SockJs) client will need to connect to
 	//for the WebSocket handshake
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/mychatapplication").withSockJS();
+		registry.addEndpoint("/mychatapplication").setAllowedOrigins("*").withSockJS();
 	}
 }

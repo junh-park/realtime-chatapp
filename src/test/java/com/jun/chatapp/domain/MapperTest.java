@@ -7,7 +7,6 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -29,7 +28,7 @@ public class MapperTest {
 	
 	private UserEntity userEntity;
 	private UserDto userDto;
-
+	
 	@BeforeEach
 	public void setup() {
 		userEntity = new UserEntity(1L, "user", "password", "jun", "park", "jun@hotmail.com",
