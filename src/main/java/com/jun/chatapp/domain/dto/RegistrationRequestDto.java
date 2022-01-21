@@ -3,8 +3,7 @@ package com.jun.chatapp.domain.dto;
 import lombok.*;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
-public class UserDto {
-	private int id;
+public class RegistrationRequestDto {
 	private String username;
 	private String password;
 	private String firstName;

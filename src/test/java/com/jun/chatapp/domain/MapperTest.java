@@ -12,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.jun.chatapp.domain.dto.UserDto;
-import com.jun.chatapp.domain.entity.Authority;
+import com.jun.chatapp.domain.entity.Role;
 import com.jun.chatapp.domain.entity.UserEntity;
 import com.jun.chatapp.domain.mapper.UserMapper;
 import com.jun.chatapp.domain.mapper.UserMapperImpl;
@@ -31,9 +31,9 @@ public class MapperTest {
 	
 	@BeforeEach
 	public void setup() {
-		userEntity = new UserEntity(1L, "user", "password", "jun", "park", "jun@hotmail.com",
-				Set.of(new Authority(1L, Authority.USER)), true);
-		userDto = UserDto.builder().id(1L).username("user").password("password")
+		userEntity = new UserEntity(1, "user", "password", "jun", "park", "jun@hotmail.com",
+				Set.of(new Role(Role.USER)), true);
+		userDto = UserDto.builder().id(1).username("user").password("password")
 				.firstName("jun").lastName("park").email("jun@hotmail.com").build();
 	}
 	
@@ -49,6 +49,6 @@ public class MapperTest {
 		UserEntity mappedUserEntity= userMapper.toUser(userDto);
 		
 		assertThat(mappedUserEntity).usingRecursiveComparison()
-			.ignoringFields("authorities", "enabled").isEqualTo(userDto);
+			.ignoringFields("roles", "enabled").isEqualTo(userDto);
 	}
 }

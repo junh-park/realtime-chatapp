@@ -2,6 +2,7 @@ package com.jun.chatapp.domain.mapper;
 
 import org.mapstruct.Mapper;
 
+import com.jun.chatapp.domain.dto.RegistrationRequestDto;
 import com.jun.chatapp.domain.dto.UserDto;
 import com.jun.chatapp.domain.entity.UserEntity;
 
@@ -11,5 +12,7 @@ public abstract class UserMapper {
 	public abstract UserDto toUserDto(UserEntity user);
 	
 	public abstract UserEntity toUser(UserDto userDto);
+	
+	public abstract  UserEntity toUser(RegistrationRequestDto request);
 	
 }

@@ -1,49 +1,87 @@
 package com.jun.chatapp.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.ArgumentMatchers.notNull;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.json.JacksonTester;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jun.chatapp.domain.dto.AuthRequest;
+import com.jun.chatapp.domain.dto.AuthRequestDto;
+import com.jun.chatapp.domain.entity.Role;
+import com.jun.chatapp.domain.entity.UserEntity;
+import com.jun.chatapp.domain.mapper.UserMapper;
+import com.jun.chatapp.service.CustomUserDetailService;
 
+@ExtendWith(MockitoExtension.class)
 public class AuthenticationControllerTest {
-	
 	private MockMvc mockMvc;
-	private AuthRequest authRequest;
-	private JacksonTester<AuthRequest> jsonAuthRequest;
+	private AuthRequestDto authRequest;
+	private UserMapper userMapper;
+	private JacksonTester<AuthRequestDto> jsonAuthRequest;
+	
+	@Mock
+	private CustomUserDetailService userService;
+	
+	@InjectMocks
 	private AuthenticationController controller;
+	private UserEntity userEntity;
 	
 	@BeforeEach
 	public void setup() {
 		JacksonTester.initFields(this, new ObjectMapper());
 		mockMvc = MockMvcBuilders.standaloneSetup(controller)
+				.addFilter((request, response, chain) ->{
+					request.setCharacterEncoding("utf-8");
+					response.setCharacterEncoding("utf-8");
+					chain.doFilter(request, response);
+				}, "/*")
 				.build();
-		authRequest = AuthRequest.builder()
-				.username("junpark").password("junpark")
+		
+		authRequest = new AuthRequestDto("junpark", "password");
+		
+		userEntity = UserEntity.builder()
+				.username("junpark").password("password").email("junpark@hotmail.com")
+				.firstName("jun").lastName("park")
+				.roles(Set.of(new Role(Role.USER)))
+				.enabled(true)
 				.build();
 	}
 	
 	@Test
-	public void when_Login_should_return_ok() throws IOException, Exception {
-		MockHttpServletResponse response = mockMvc.perform(post("/login")
+	public void when_login_should_return_user() throws UnsupportedEncodingException, IOException, Exception {
+		when(userService.loadUserByUsername("junpark")).thenReturn(userEntity);
+		
+		mockMvc.perform(post("/login")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(jsonAuthRequest.write(authRequest).getJson()))
-			.andReturn().getResponse();
-	
-		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-		
+		.andDo(print())
+		.andExpect(status().isOk());
+	}
+
+	@Test
+	public void login_returns_TokenReponse() throws IOException, Exception {
+		mockMvc.perform(post("/login")
+				.content(jsonAuthRequest.write(authRequest).getJson())
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.accessToken", notNullValue()))
+			.andExpect(jsonPath("$.refreshToken", notNullValue()));
 	}
 }
