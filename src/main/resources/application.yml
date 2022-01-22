@@ -15,3 +15,6 @@ logging:
     org:
       springframework:
         security: INFO
+        
+jwt:
+  secret: makeItVerySecret

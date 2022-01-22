@@ -26,7 +26,7 @@ public class AuthenticationController {
 	private AuthenticationManager authManager;
 	private JwtTokenUtil jwtTokenUtil;
 	
-	@PostMapping("/login")
+	@PostMapping("/auth")
 	public ResponseEntity<String> login(@RequestBody AuthRequestDto request) {
 		UserDetails user = userDetailService.loadUserByUsername(request.getUsername());
 		Authentication authenticate = authManager

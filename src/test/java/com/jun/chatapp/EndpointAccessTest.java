@@ -42,6 +42,5 @@ public class EndpointAccessTest {
 			.andDo(print())
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$", is(1)));
-		
 	}
 }

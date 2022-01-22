@@ -25,13 +25,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jun.chatapp.domain.dto.AuthRequestDto;
-import com.jun.chatapp.domain.entity.Role;
 import com.jun.chatapp.domain.entity.UserEntity;
 import com.jun.chatapp.domain.mapper.UserMapper;
+import com.jun.chatapp.domain.model.Role;
+import com.jun.chatapp.domain.model.User;
 import com.jun.chatapp.service.CustomUserDetailService;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthenticationControllerTest {
+	
 	private MockMvc mockMvc;
 	private AuthRequestDto authRequest;
 	private UserMapper userMapper;
@@ -42,7 +44,7 @@ public class AuthenticationControllerTest {
 	
 	@InjectMocks
 	private AuthenticationController controller;
-	private UserEntity userEntity;
+	private User user;
 	
 	@BeforeEach
 	public void setup() {
@@ -57,19 +59,19 @@ public class AuthenticationControllerTest {
 		
 		authRequest = new AuthRequestDto("junpark", "password");
 		
-		userEntity = UserEntity.builder()
+		user = User.builder()
 				.username("junpark").password("password").email("junpark@hotmail.com")
 				.firstName("jun").lastName("park")
-				.roles(Set.of(new Role(Role.USER)))
+				.roles(Set.of(Role.USER))
 				.enabled(true)
 				.build();
 	}
 	
 	@Test
 	public void when_login_should_return_user() throws UnsupportedEncodingException, IOException, Exception {
-		when(userService.loadUserByUsername("junpark")).thenReturn(userEntity);
+		when(userService.loadUserByUsername("junpark")).thenReturn(user);
 		
-		mockMvc.perform(post("/login")
+		mockMvc.perform(post("/auth")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(jsonAuthRequest.write(authRequest).getJson()))
 		.andDo(print())
@@ -78,7 +80,7 @@ public class AuthenticationControllerTest {
 
 	@Test
 	public void login_returns_TokenReponse() throws IOException, Exception {
-		mockMvc.perform(post("/login")
+		mockMvc.perform(post("/auth")
 				.content(jsonAuthRequest.write(authRequest).getJson())
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("$.accessToken", notNullValue()))
