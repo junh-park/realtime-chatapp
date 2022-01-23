@@ -26,7 +26,8 @@ public class JwtTokenUtilTest {
 	public void setup() {
 		user = User.builder().username("junpark").roles(Set.of(Role.USER)).build();
 		jwtSecret = "testJwtSecretKey";
-		jwtTokenUtil = new JwtTokenUtil(jwtSecret);
+		String jwtIssuer= "testJwtSecretKey";
+		jwtTokenUtil = new JwtTokenUtil();
 	}
 	
 	@Test
@@ -55,7 +56,7 @@ public class JwtTokenUtilTest {
 	public void validate_accessToken() {
 		String jwtToken = jwtTokenUtil.generateAccessToken(user);
 		
-		boolean validity = jwtTokenUtil.validate(jwtToken, user);
+		boolean validity = jwtTokenUtil.validate(jwtToken);
 		
 		assertThat(validity).isTrue();
 	}

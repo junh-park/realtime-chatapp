@@ -31,10 +31,10 @@ public class MapperTest {
 	
 	@BeforeEach
 	public void setup() {
-		userEntity = new UserEntity(1, "user", "password", "jun", "park", "jun@hotmail.com",
-				Set.of(Role.USER), true);
+		userEntity = new UserEntity(1, "user", "password", "jun", "park", "jun@hotmail.com", Set.of(Role.USER), true);
 		userDto = User.builder().id(1).username("user").password("password")
-				.firstName("jun").lastName("park").email("jun@hotmail.com").build();
+				.firstName("jun").lastName("park").email("jun@hotmail.com")
+				.build();
 	}
 	
 	@Test

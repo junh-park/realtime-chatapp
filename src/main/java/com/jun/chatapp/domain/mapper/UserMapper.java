@@ -15,6 +15,6 @@ public abstract class UserMapper {
 	
 	public abstract UserEntity toUserEntity(User userDto);
 	
-	public abstract  UserEntity toUserEntity(RegistrationRequestDto request);
+	public abstract UserEntity toUserEntity(RegistrationRequestDto request);
 	
 }

@@ -18,3 +18,4 @@ logging:
         
 jwt:
   secret: makeItVerySecret
+  issuer: JunPark

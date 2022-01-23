@@ -24,8 +24,9 @@ public class JwtTokenUtil {
 
 	public static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60;
 
-	@Value("${jwt.secret}")
-	private final String jwtSecret;
+//	@Value("${jwt.secret}")
+	private final String jwtSecret = "makeItVerySecret";
+//	@Value("${jwt.issuer}")
 	private final String jwtIssuer = "JunPark";
 
 	public String generateAccessToken(User user) {
@@ -51,7 +52,7 @@ public class JwtTokenUtil {
 				.getSubject();
 	}
 
-	public boolean validate(String jwtToken, User user) {
+	public boolean validate(String jwtToken) {
 		try {
 			Jwts.parser()
 			.setSigningKey(jwtSecret)

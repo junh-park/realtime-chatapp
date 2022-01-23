@@ -1,14 +1,10 @@
 package com.jun.chatapp.service;
 
-import java.util.Optional;
-
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.jun.chatapp.domain.mapper.UserMapper;
-import com.jun.chatapp.domain.model.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +12,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
 
-	private final UserService userService;
+	@Lazy
+	private UserService userService;
 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		return userService.findByUsername(username);
