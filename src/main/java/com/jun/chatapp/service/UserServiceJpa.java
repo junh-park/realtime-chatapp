@@ -38,7 +38,7 @@ public class UserServiceJpa implements UserService {
 
 	public User findByUsername(String username) {
 		UserEntity userEntity = userRepo.findByUsername(username).orElseThrow(() ->
-			new UsernameNotFoundException("Please check your credentials again"));
+			new UsernameNotFoundException("Please check your user credentials again"));
 		
 		return userMapper.toUser(userEntity);
 	}

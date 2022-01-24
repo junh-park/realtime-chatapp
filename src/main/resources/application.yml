@@ -14,7 +14,10 @@ logging:
   level:
     org:
       springframework:
-        security: INFO
+        security: DEBUG
+        test:
+          context:
+            cache: DEBUG
         
 jwt:
   secret: makeItVerySecret

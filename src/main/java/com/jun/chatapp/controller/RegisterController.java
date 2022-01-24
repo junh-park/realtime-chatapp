@@ -17,10 +17,10 @@ public class RegisterController {
 	private final UserService userService;
 	
 	@PostMapping("/register")
-	public ResponseEntity<String> registration(@RequestBody RegistrationRequestDto request) {
-		int returnedId = userService.createUser(request);
-		
-		return new ResponseEntity(returnedId, HttpStatus.CREATED);
+	public ResponseEntity<Integer> registration(@RequestBody RegistrationRequestDto request) {
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.body(userService.createUser(request));
 	}
 	
 }
