@@ -6,7 +6,7 @@ import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WevConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
 
 	@Bean
 	public GrantedAuthorityDefaults grantedAuthorityDefaults() {

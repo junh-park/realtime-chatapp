@@ -1,4 +1,4 @@
-package com.jun.chatapp.config;
+package com.jun.chatapp.config.ws;
 
 public class WebSocketSecurityConfig {
 

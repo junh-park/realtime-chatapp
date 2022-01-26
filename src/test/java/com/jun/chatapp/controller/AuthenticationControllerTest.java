@@ -33,7 +33,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.util.NestedServletException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jun.chatapp.config.JwtTokenUtil;
+import com.jun.chatapp.config.security.JwtTokenUtil;
 import com.jun.chatapp.domain.dto.AuthRequestDto;
 import com.jun.chatapp.domain.dto.UserDto;
 import com.jun.chatapp.domain.mapper.UserViewMapper;

@@ -1,4 +1,4 @@
-package com.jun.chatapp.config;
+package com.jun.chatapp.config.security;
 
 import javax.servlet.http.HttpServletResponse;
 

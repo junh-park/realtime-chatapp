@@ -2,6 +2,7 @@ package com.jun.chatapp;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,8 +29,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.jun.chatapp.config.JwtTokenFilter;
-import com.jun.chatapp.config.JwtTokenUtil;
+import com.jun.chatapp.config.security.JwtTokenFilter;
+import com.jun.chatapp.config.security.JwtTokenUtil;
 import com.jun.chatapp.domain.model.Role;
 import com.jun.chatapp.domain.model.User;
 
@@ -41,56 +42,79 @@ public class FilterChainTest {
 	private MockHttpServletRequest request;
 	private MockHttpServletResponse response;
 	private User user;
-	
+
 	@Mock
 	private SecurityContext securityContext;
-	
+
 	@Mock
 	private UserDetailsService userDetailService;
 
 	@Mock
 	private JwtTokenUtil jwtTokenUtil;
-	
+
 	@InjectMocks
 	private JwtTokenFilter filter;
 
 	@BeforeEach
 	public void setup() {
-		 passwordEncoder = new BCryptPasswordEncoder();
-		 request = new MockHttpServletRequest();
-		 response = new MockHttpServletResponse();
-		 filterChain = new MockFilterChain();
+		passwordEncoder = new BCryptPasswordEncoder();
+		request = new MockHttpServletRequest();
+		response = new MockHttpServletResponse();
+		filterChain = new MockFilterChain();
 
-		 user = User.builder()
-				 .username("junpark").email("user@email.com")
-				 .password(passwordEncoder.encode("password"))
-				 .firstName("jun").lastName("park")
-				 .email("junpark@hotmail.com")
-				 .roles(Set.of(Role.USER))
-				 .build();
+		user = User.builder()
+				.username("junpark").email("user@email.com")
+				.password(passwordEncoder.encode("password"))
+				.firstName("jun").lastName("park")
+				.email("junpark@hotmail.com")
+				.roles(Set.of(Role.USER))
+				.build();
 
-		 JwtTokenUtil tokenUtil= new JwtTokenUtil();
-		 String token = "Bearer " + tokenUtil.generateAccessToken(user);
-		 request.addHeader(HttpHeaders.AUTHORIZATION, token);
+		JwtTokenUtil tokenUtil= new JwtTokenUtil();
+		String token = "Bearer " + tokenUtil.generateAccessToken(user);
+		request.addHeader(HttpHeaders.AUTHORIZATION, token);
 
-		 filter = new JwtTokenFilter(jwtTokenUtil, userDetailService);
+		filter = new JwtTokenFilter(jwtTokenUtil, userDetailService);
 	}
-	
+
 	@Test
 	public void setAuthentication_In_SecurityContext() throws ServletException, IOException {
 		SecurityContextHolder.setContext(securityContext);
 		when(jwtTokenUtil.validate(anyString())).thenReturn(true);
 		when(jwtTokenUtil.getUsernameFromToken(anyString())).thenReturn(user.getUsername());
 		when(userDetailService.loadUserByUsername(anyString())).thenReturn(user);
-		
+
 		filter.doFilter(request, response, filterChain);
 
 		ArgumentCaptor<UsernamePasswordAuthenticationToken> tokenArgCaptor= 
 				ArgumentCaptor.forClass(UsernamePasswordAuthenticationToken.class);
 		verify(securityContext, times(1)).setAuthentication(tokenArgCaptor.capture());
-		
+
 		UsernamePasswordAuthenticationToken arg = tokenArgCaptor.getValue();
 		assertThat(arg.getPrincipal()).isInstanceOf(User.class);
 		assertThat(arg.getPrincipal()).usingRecursiveComparison().isEqualTo(user);
+	}
+
+	@Test
+	void filter_continuesToNextFilter() throws ServletException, IOException {
+		when(jwtTokenUtil.validate(anyString())).thenReturn(true);
+		when(jwtTokenUtil.getUsernameFromToken(anyString())).thenReturn(user.getUsername());
+		when(userDetailService.loadUserByUsername(anyString())).thenReturn(user);
+		
+		MockFilterChain filterChainSpy = spy(filterChain);
+
+		filter.doFilter(request, response, filterChainSpy);
+
+		verify(filterChainSpy, times(1)).doFilter(request, response);
+	}
+
+	@Test
+	void filterWithoutToken_continuesToNextFilter() throws ServletException, IOException {
+		MockFilterChain filterChainSpy = spy(filterChain);
+		MockHttpServletRequest requestWithoutToken = new MockHttpServletRequest();
+
+		filter.doFilter(requestWithoutToken, response, filterChainSpy);
+
+		verify(filterChainSpy, times(1)).doFilter(requestWithoutToken, response);
 	}
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jun.chatapp.config.JwtTokenUtil;
+import com.jun.chatapp.config.security.JwtTokenUtil;
 import com.jun.chatapp.domain.dto.AuthRequestDto;
 import com.jun.chatapp.domain.dto.UserDto;
 import com.jun.chatapp.domain.mapper.UserViewMapper;

@@ -8,7 +8,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.jun.chatapp.config.JwtTokenUtil;
+import com.jun.chatapp.config.security.JwtTokenUtil;
 import com.jun.chatapp.domain.mapper.JsonMapper;
 import com.jun.chatapp.domain.model.Role;
 import com.jun.chatapp.domain.model.User;

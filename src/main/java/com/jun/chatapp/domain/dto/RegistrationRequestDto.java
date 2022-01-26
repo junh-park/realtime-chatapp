@@ -6,7 +6,7 @@ import lombok.*;
 public class RegistrationRequestDto {
 	private String username;
 	private String password;
-	private String firstName;
+	private String firstName; 
 	private String lastName;
 	private String email;
 }
