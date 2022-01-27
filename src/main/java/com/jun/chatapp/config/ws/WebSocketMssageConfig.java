@@ -1,6 +1,7 @@
 package com.jun.chatapp.config.ws;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class WebSocketMssageConfig implements WebSocketMessageBrokerConfigurer {
 
 	private final JwtHandShakeInterceptor jwtHandshakeInterceptor;
+	private final WebSocketSecurityConfig wsSecurityConfig;
 	
 	//creates in-memory message broker with one+ destination for sending and receiving messages
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
@@ -25,9 +27,16 @@ public class WebSocketMssageConfig implements WebSocketMessageBrokerConfigurer {
 	
 	//used to filter destination handled by methods annotated with @MessageMapping which you implement in controller
 	//after processing the message, the controller will send it to the broker
-	//"/mychatapplication" is the HTTP URL for the endpoint to which a WebSocket(or SockJs) client will need to connect to
+	//"/chatapp" is the HTTP URL for the endpoint to which a WebSocket(or SockJs) client will need to connect to
 	//for the WebSocket handshake
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/mychatapplication").addInterceptors(jwtHandshakeInterceptor).setAllowedOrigins("*").withSockJS();
+		registry.addEndpoint("/chatapp").setAllowedOrigins("*").withSockJS();
 	}
+	
+	@Override
+	public void configureClientInboundChannel(ChannelRegistration registration) {
+		registration.interceptors();
+	}
+	
+	
 }
