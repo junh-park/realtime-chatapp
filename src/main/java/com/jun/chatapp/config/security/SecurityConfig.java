@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.authorizeRequests()
 			.antMatchers("/auth/**", "/register/**").permitAll()
-			.antMatchers("/chatapp").permitAll()
+			.antMatchers("/chatapp/**").authenticated()
 			.anyRequest().authenticated();
 
 		http.sessionManagement()

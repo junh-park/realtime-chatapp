@@ -1,10 +1,18 @@
 package com.jun.chatapp.config.security;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import com.jun.chatapp.domain.model.Role;
 import com.jun.chatapp.domain.model.User;
 
 import io.jsonwebtoken.Claims;
@@ -45,11 +53,33 @@ public class JwtTokenUtil {
 	}
 
 	public String getUsernameFromToken(String jwtToken) {
+		return getClaimsFromToken(jwtToken)
+				.getSubject();
+	}
+	
+	public Authentication getUserFromToken(String jwtToken) {
+		Claims claims = getClaimsFromToken(jwtToken);
+		
+		List<String> roles = claims.get("roles", List.class);
+		User user = new User().builder()
+				.username(claims.getSubject())
+				.email(claims.get("email", String.class))
+				.password("")
+				.roles(roles.stream()
+						.map(role -> Role.valueOf(role))
+						.collect(Collectors.toSet()))
+				.build();
+		List<GrantedAuthority> auths = AuthorityUtils
+				.commaSeparatedStringToAuthorityList(roles.toString());
+
+		return new UsernamePasswordAuthenticationToken(user, "", auths);
+	}
+
+	private Claims getClaimsFromToken(String jwtToken) {
 		return Jwts.parser()
 				.setSigningKey(jwtSecret)
 				.parseClaimsJws(jwtToken)
-				.getBody()
-				.getSubject();
+				.getBody();
 	}
 
 	public boolean validate(String jwtToken) {
