@@ -61,7 +61,7 @@ public class JwtTokenUtil {
 		Claims claims = getClaimsFromToken(jwtToken);
 		
 		List<String> roles = claims.get("roles", List.class);
-		User user = new User().builder()
+		User user = User.builder()
 				.username(claims.getSubject())
 				.email(claims.get("email", String.class))
 				.password("")

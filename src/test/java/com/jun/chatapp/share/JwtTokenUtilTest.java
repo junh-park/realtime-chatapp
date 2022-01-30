@@ -25,7 +25,7 @@ public class JwtTokenUtilTest {
 	@BeforeEach
 	public void setup() {
 		user = User.builder().username("junpark").roles(Set.of(Role.USER)).build();
-		jwtSecret = "testJwtSecretKey";
+		jwtSecret = "makeItVerySecret";
 		String jwtIssuer= "testJwtSecretKey";
 		jwtTokenUtil = new JwtTokenUtil();
 	}
