@@ -73,32 +73,32 @@ public class WebSocketMssageConfig implements WebSocketMessageBrokerConfigurer {
 		registry.addEndpoint("/chatapp").setAllowedOrigins("*").withSockJS();
 	}
 
-	@Override
-	public void configureClientInboundChannel(ChannelRegistration registration) {
-		registration.interceptors(new ChannelInterceptor() {
-			@Override
-			public Message<?> preSend(Message<?> message, MessageChannel channel) {
-				StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-
-				if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-					List<String> auth = accessor.getNativeHeader("X-Authorization");
-					log.info("X-Authorization: {}", auth);
-
-					String accessToken = auth.get(0).split(" ")[1];
-
-					if (tokenUtil.validate(accessToken)) {
-						Principal authentication = tokenUtil.getUserFromToken(accessToken);
-
-						setSessionEvent(message, accessor, authentication);
-
-						accessor.setUser(authentication);
-						accessor.setLeaveMutable(true);
-					}
-				}
-				return message;
-			}
-		});
-	}
+//	@Override
+//	public void configureClientInboundChannel(ChannelRegistration registration) {
+//		registration.interceptors(new ChannelInterceptor() {
+//			@Override
+//			public Message<?> preSend(Message<?> message, MessageChannel channel) {
+//				StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+//
+//				if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+//					List<String> auth = accessor.getNativeHeader("X-Authorization");
+//					log.info("X-Authorization: {}", auth);
+//
+//					String accessToken = auth.get(0).split(" ")[1];
+//
+//					if (tokenUtil.validate(accessToken)) {
+//						Principal authentication = tokenUtil.getUserFromToken(accessToken);
+//
+//						setSessionEvent(message, accessor, authentication);
+//
+//						accessor.setUser(authentication);
+//						accessor.setLeaveMutable(true);
+//					}
+//				}
+//				return message;
+//			}
+//		});
+//	}
 	
 	private void setSessionEvent(Message<?> message, StompHeaderAccessor accessor, Principal authentication) {
 		switch (accessor.getMessageType()) {
