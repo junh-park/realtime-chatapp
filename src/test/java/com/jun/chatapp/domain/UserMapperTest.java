@@ -39,7 +39,10 @@ public class UserMapperTest {
 	
 	@BeforeEach
 	public void setup() {
-		userEntity = new UserEntity(1, "junpark", "password", "jun", "park", "jun@hotmail.com", Set.of(Role.USER), true);
+		userEntity = UserEntity.builder().id(1).username("junpark").password("password")
+				.firstName("jun").lastName("park").email("jun@hotmail.com")
+				.roles(Set.of(Role.USER)).enabled(true)
+				.build();
 		user = User.builder().id(1).username("junpark").password("password")
 				.firstName("jun").lastName("park").email("jun@hotmail.com")
 				.build();
@@ -60,7 +63,7 @@ public class UserMapperTest {
 		UserEntity mappedUserEntity= userMapper.toUserEntity(user);
 		
 		assertThat(mappedUserEntity).usingRecursiveComparison()
-			.ignoringFields("roles", "enabled").isEqualTo(user);
+			.ignoringFields("roles", "enabled", "messages").isEqualTo(user);
 	}
 	
 	@Test

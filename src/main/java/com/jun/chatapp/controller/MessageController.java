@@ -3,6 +3,7 @@ package com.jun.chatapp.controller;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
@@ -35,9 +36,10 @@ public class MessageController {
     }
 	
 	@MessageMapping("/chat")
-	public MessageDto sendMessage(@Payload MessageDto content) {
+	public List<MessageDto> sendMessage(@Payload MessageDto content, Principal principal) {
 		log.debug(content.toString());
-		return content;
+		messageService.saveMessage(content);
+		return messageService.getMessages();
 	}
 
     private String addTimestamp() {

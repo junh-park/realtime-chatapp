@@ -1,8 +1,9 @@
 package com.jun.chatapp.domain.entity;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,7 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -23,14 +24,15 @@ import lombok.Setter;
 
 @Entity @Table(name = "Message")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class MessageEntity {
-
+public class GroupEntity {
+	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	private String message;
 	@Column(name = "created_at")
 	@CreationTimestamp
-	private Timestamp createdAt;
-	@Column(name = "sender_id")
-	private int senderId;
+	private Timestamp cratedAt;
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinColumn()
+	private Set<UserEntity> users = new HashSet<>();
 }

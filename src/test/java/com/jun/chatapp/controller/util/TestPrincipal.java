@@ -1,4 +1,4 @@
-package com.jun.chatapp.controller;
+package com.jun.chatapp.controller.util;
 
 import java.security.Principal;
 

@@ -1,5 +1,10 @@
 package com.jun.chatapp.service;
 
-public interface MessageService {
+import java.util.List;
 
+import com.jun.chatapp.domain.dto.MessageDto;
+
+public interface MessageService {
+	public void saveMessage(MessageDto message);
+	public List<MessageDto> getMessages();
 }

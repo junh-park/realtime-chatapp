@@ -24,9 +24,15 @@ import org.springframework.test.util.JsonPathExpectationsHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jun.chatapp.controller.util.TestMessageChannel;
+import com.jun.chatapp.controller.util.TestMessageService;
+import com.jun.chatapp.controller.util.TestPrincipal;
 import com.jun.chatapp.domain.dto.MessageDto;
 import com.jun.chatapp.service.MessageService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class MessageControllerTest {
 	
 	private TestMessageChannel clientOutboundChannel;
@@ -36,6 +42,7 @@ public class MessageControllerTest {
 
 	@BeforeEach
 	public void setup() {
+		mapper = new ObjectMapper();
 		messageService = new TestMessageService();
 		MessageController controller = new MessageController(messageService);
 		
@@ -78,6 +85,7 @@ public class MessageControllerTest {
 	@Test
 	public void shouldSaveMessageToDbAndPrintTheResult_whenMessageIsSent() throws JsonMappingException, JsonProcessingException {
 		String messageToSend = mapper.writeValueAsString(new MessageDto("junpark", "hello I am jun park"));
+		log.debug(messageToSend);
 		
 		StompHeaderAccessor header = StompHeaderAccessor.create(StompCommand.SEND);
 		header.setDestination("/app/chat");
@@ -88,11 +96,14 @@ public class MessageControllerTest {
 		
 		annotationMethodHandler.handleMessage(message);
 		
-		assertThat(this.clientOutboundChannel.getMessages().size()).isEqualTo(1);
-		Message<?> reply = this.clientOutboundChannel.getMessages().get(0);
-		String payload = (String) reply.getPayload();
-		MessageDto returnedMessage = mapper.readValue(payload, MessageDto.class);
-		assertThat(returnedMessage).usingRecursiveComparison().isEqualTo(messageToSend);
+		assertThat(this.messageService.getMessages().size()).isEqualTo(1);
+		
+		List<MessageDto> messages = this.messageService.getMessages();
+		assertThat(messages.size()).isEqualTo(1);
+		
+		MessageDto returnedMessage = messages.get(0);
+		assertThat(returnedMessage).usingRecursiveComparison()
+			.isEqualTo(mapper.readValue(messageToSend, MessageDto.class));
 	}
 	
 	private static class TestAnnotationMethodHandler extends SimpAnnotationMethodMessageHandler {

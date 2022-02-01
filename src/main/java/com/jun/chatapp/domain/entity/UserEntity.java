@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -20,11 +21,13 @@ import com.jun.chatapp.domain.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
 @Entity @Table(name = "USER")
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class UserEntity implements Serializable {
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,8 +41,6 @@ public class UserEntity implements Serializable {
 	private String lastName;
 	@Email
 	private String email;
-//	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	@JoinColumn(name = "user_id")
 	@ElementCollection(fetch = FetchType.EAGER)
 	private Set<Role> roles = new HashSet<>();
 	private boolean enabled;
