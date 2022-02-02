@@ -41,20 +41,20 @@ public class WebSocketMssageConfig implements WebSocketMessageBrokerConfigurer {
 
 	private final JwtTokenUtil tokenUtil;
 
-	private DefaultSimpUserRegistry userRegistry = new DefaultSimpUserRegistry();
-	private DefaultUserDestinationResolver resolver = new DefaultUserDestinationResolver(userRegistry);
-
-	@Bean
-	@Primary
-	public SimpUserRegistry userRegistry() {
-		return userRegistry;
-	}
-
-	@Bean
-	@Primary
-	public UserDestinationResolver userDestinationResolver() {
-		return resolver;
-	}
+//	private DefaultSimpUserRegistry userRegistry = new DefaultSimpUserRegistry();
+//	private DefaultUserDestinationResolver resolver = new DefaultUserDestinationResolver(userRegistry);
+//
+//	@Bean
+//	@Primary
+//	public SimpUserRegistry userRegistry() {
+//		return userRegistry;
+//	}
+//
+//	@Bean
+//	@Primary
+//	public UserDestinationResolver userDestinationResolver() {
+//		return resolver;
+//	}
 
 	// creates in-memory message broker with one+ destination for sending and
 	// receiving messages
@@ -100,22 +100,22 @@ public class WebSocketMssageConfig implements WebSocketMessageBrokerConfigurer {
 //		});
 //	}
 	
-	private void setSessionEvent(Message<?> message, StompHeaderAccessor accessor, Principal authentication) {
-		switch (accessor.getMessageType()) {
-		case CONNECT:
-			userRegistry.onApplicationEvent(
-					new SessionConnectedEvent(this, (Message<byte[]>) message, authentication)); break;
-		case SUBSCRIBE:
-			userRegistry.onApplicationEvent(
-					new SessionSubscribeEvent(this, (Message<byte[]>) message, authentication)); break;
-		case UNSUBSCRIBE:
-			userRegistry.onApplicationEvent(
-					new SessionUnsubscribeEvent(this, (Message<byte[]>) message, authentication)); break;
-		case DISCONNECT:
-			userRegistry.onApplicationEvent(new SessionDisconnectEvent(this, (Message<byte[]>) message,
-					accessor.getSessionId(), CloseStatus.NORMAL)); break;
-		default: break;
-		}
-	}
+//	private void setSessionEvent(Message<?> message, StompHeaderAccessor accessor, Principal authentication) {
+//		switch (accessor.getMessageType()) {
+//		case CONNECT:
+//			userRegistry.onApplicationEvent(
+//					new SessionConnectedEvent(this, (Message<byte[]>) message, authentication)); break;
+//		case SUBSCRIBE:
+//			userRegistry.onApplicationEvent(
+//					new SessionSubscribeEvent(this, (Message<byte[]>) message, authentication)); break;
+//		case UNSUBSCRIBE:
+//			userRegistry.onApplicationEvent(
+//					new SessionUnsubscribeEvent(this, (Message<byte[]>) message, authentication)); break;
+//		case DISCONNECT:
+//			userRegistry.onApplicationEvent(new SessionDisconnectEvent(this, (Message<byte[]>) message,
+//					accessor.getSessionId(), CloseStatus.NORMAL)); break;
+//		default: break;
+//		}
+//	}
 
 }

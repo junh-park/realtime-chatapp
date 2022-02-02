@@ -16,7 +16,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Entity @Table(name = "user_message")
+@Entity @Table(name = "MESSAGE_RECIPIENT")
 @IdClass(MessageRecipientId.class)
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class MessageRecipientEntity implements Serializable {
@@ -26,5 +26,7 @@ public class MessageRecipientEntity implements Serializable {
 	
 	@Id @NotNull @NonNull
 	private int messageId;
+	
+	private int groupId;
 	
 }
