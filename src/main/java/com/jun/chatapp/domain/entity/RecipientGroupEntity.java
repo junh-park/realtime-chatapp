@@ -1,32 +1,35 @@
 package com.jun.chatapp.domain.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Entity @Table(name = "MESSAGE_RECIPIENT")
-@IdClass(RecipientGroupId.class)
+@Entity @Table(name = "RECIPIENT_GROUP")
+@IdClass(MessageRecipientId.class)
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class MessageRecipientEntity  {
-
-	@Id @NotNull @NonNull 
+public class RecipientGroupEntity {
+	
+	@Id
 	private int userId;
 	
-	@Id @NotNull @NonNull
-	private int messageId;
-	
+	@Id
 	private int groupId;
+	
+	@MapsId("userId")
+	@ManyToOne
+	UserEntity user;
+
+	@MapsId("groupId")
+	@ManyToOne
+	GroupEntity group;
 	
 }

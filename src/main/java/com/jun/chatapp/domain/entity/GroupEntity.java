@@ -37,8 +37,9 @@ public class GroupEntity {
 	@CreationTimestamp()
 	private LocalDateTime createdAt;
 
+	@Builder.Default
 	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
-	@JoinTable(name = "user_group",
+	@JoinTable(name = "recipient_group",
 		joinColumns = @JoinColumn(name = "group_id"),
 		inverseJoinColumns = @JoinColumn(name = "user_id")
 	)

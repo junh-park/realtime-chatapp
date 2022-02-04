@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class GroupService {
 
 	private final GroupRepository groupRepo;
@@ -26,8 +25,8 @@ public class GroupService {
 		GroupEntity group = new GroupEntity();
 		group.setGroupName("New group conversation");
 		group.setCreatedAt(LocalDateTime.now());
-		group.getUsers().add(user1);
-		group.getUsers().add(user2);
+		group.addUser(user1);
+		group.addUser(user2);
 		
 		return groupRepo.save(group);
 	}

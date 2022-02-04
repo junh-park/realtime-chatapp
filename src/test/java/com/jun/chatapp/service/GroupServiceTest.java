@@ -1,12 +1,28 @@
 package com.jun.chatapp.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.Matchers.empty;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
+
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +34,8 @@ import com.jun.chatapp.domain.entity.UserEntity;
 import com.jun.chatapp.domain.model.Role;
 import com.jun.chatapp.repository.GroupRepository;
 
-@DataJpaTest
+@ExtendWith(MockitoExtension.class)
+@Transactional
 public class GroupServiceTest {
 	private GroupService groupService;
 	private MessageEntity message;
@@ -26,9 +43,11 @@ public class GroupServiceTest {
 	private UserEntity jun;
 	private UserEntity dodo;
 	private UserEntity mimi;
+	private GroupEntity group;
 
-	@Autowired
+	@Mock
 	private GroupRepository groupRepository;
+	private Optional<GroupEntity> optGroup;
 	
 	@BeforeEach
 	public void setup() {
@@ -55,23 +74,47 @@ public class GroupServiceTest {
 		messageRecipient = MessageRecipientEntity.builder()
 			.userId(1).messageId(1)
 			.build();
+
+		group = GroupEntity.builder().id(1).groupName("New conversation Group")
+				.createdAt(LocalDateTime.now()).build();
+		group.addUser(dodo);
+		group.addUser(jun);
+		
+		optGroup = Optional.of(new GroupEntity());
 	}
 	
 	@Test
 	public void createGroup_when_2UsersAreEngaged() {
-		GroupEntity groupEntity = groupService.createConversation(jun, dodo);
+		when(groupRepository.save(any(GroupEntity.class))).thenReturn(group);
 		
-		assertThat(groupEntity.getUsers()).contains(jun, dodo);
+		GroupEntity newGroup = groupService.createConversation(jun, dodo);
+		
+		assertThat(newGroup.getUsers()).contains(jun, dodo);
 	}
 	
 	@Test
 	public void addUserToGroup_whenNewUserIsAdded() {
-		GroupEntity groupEntity = groupService.createConversation(jun, dodo);
+		group.addUser(mimi);
+		when(groupRepository.findById(any(Integer.class))).thenReturn(Optional.of(group));
+		when(groupRepository.save(any(GroupEntity.class))).thenReturn(group);
 
-		GroupEntity updatedGroup = groupService.addUserToExistingGroup(groupEntity, mimi);
+		GroupEntity updatedGroup = groupService.addUserToExistingGroup(group, mimi);
 	
 		assertThat(updatedGroup.getUsers()).hasSize(3);
 		assertThat(updatedGroup.getUsers()).contains(jun, dodo, mimi);
+	}
+	
+	@Test
+	public void throwException_whenNewUserIsAdded_toAddUserToGroup_andNoGroupIsFound() throws Throwable {
+		group.addUser(mimi);
+		when(groupRepository.findById(any(Integer.class)).orElseThrow(() -> new EntityNotFoundException())).thenThrow(EntityNotFoundException.class);
+//		when(optGroup.orElseThrow(() -> new EntityNotFoundException())).thenThrow(EntityNotFoundException.class);
+		when(groupRepository.save(any(GroupEntity.class))).thenThrow(IllegalArgumentException.class);
+
+		GroupEntity updatedGroup = groupService.addUserToExistingGroup(group, mimi);
+		
+		assertThatExceptionOfType(EntityNotFoundException.class)
+			.isThrownBy(() -> groupService.addUserToExistingGroup(group, mimi));
 	}
 	
 }
