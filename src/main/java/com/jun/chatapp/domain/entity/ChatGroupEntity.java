@@ -26,15 +26,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity @Table(name = "CHAT_GROUP")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor@Builder
-public class GroupEntity {
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+public class ChatGroupEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "group_id")
+	@Column(name = "chat_group_id")
 	private int id;
 	private String groupName;
 	@Column(name = "created_at", columnDefinition = "TIMESTAMP")
-	@CreationTimestamp()
+	@CreationTimestamp
 	private LocalDateTime createdAt;
 
 	@Builder.Default
@@ -62,9 +62,9 @@ public class GroupEntity {
 	public boolean equals(Object obj) {
 		if (obj == null) return false;
 		if (obj.getClass() != this.getClass()) return false;
-		if (!(obj instanceof GroupEntity)) return false;
+		if (!(obj instanceof ChatGroupEntity)) return false;
 		
-		GroupEntity other = (GroupEntity) obj;
+		ChatGroupEntity other = (ChatGroupEntity) obj;
 		return (other.getId() == this.getId());
 	}
 }

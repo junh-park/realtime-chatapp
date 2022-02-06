@@ -1,6 +1,7 @@
 package com.jun.chatapp.domain.entity;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,10 +28,13 @@ public class MessageEntity {
 
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	
 	private String message;
-	@Column(name = "created_at")
+	@Column(name = "created_at", columnDefinition = "TIMESTAMP")
 	@CreationTimestamp
-	private Timestamp createdAt;
-	@Column(name = "sender_id")
-	private int senderId;
+	private LocalDateTime createdAt;
+	@Column(name = "sender")
+	private UserEntity sender;
+	@Column(name = "chat_group")
+	private ChatGroupEntity recipients;
 }

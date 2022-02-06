@@ -44,15 +44,16 @@ public class UserEntity {
 	private Set<Role> roles = new HashSet<>();
 	private boolean enabled;
 	
+	@Builder.Default
 	@ManyToMany(mappedBy = "users")
-	private Set<GroupEntity> groups= new HashSet<>();
+	private Set<ChatGroupEntity> groups= new HashSet<>();
 	
-	public void addGroup(GroupEntity group) {
+	public void addGroup(ChatGroupEntity group) {
 		this.groups.add(group);
 		group.getUsers().add(this);
 	}
 	
-	public void removeUser(GroupEntity group) {
+	public void removeUser(ChatGroupEntity group) {
 		this.groups.remove(group);
 		group.getUsers().remove(this);
 	}

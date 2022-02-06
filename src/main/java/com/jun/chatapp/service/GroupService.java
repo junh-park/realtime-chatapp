@@ -9,9 +9,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.jun.chatapp.domain.entity.GroupEntity;
+import com.jun.chatapp.domain.entity.ChatGroupEntity;
 import com.jun.chatapp.domain.entity.UserEntity;
-import com.jun.chatapp.repository.GroupRepository;
+import com.jun.chatapp.repository.ChatGroupRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,10 +19,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GroupService {
 
-	private final GroupRepository groupRepo;
+	private final ChatGroupRepository groupRepo;
 	
-	public GroupEntity createConversation(UserEntity user1, UserEntity user2) {
-		GroupEntity group = new GroupEntity();
+	public ChatGroupEntity createConversation(UserEntity user1, UserEntity user2) {
+		ChatGroupEntity group = new ChatGroupEntity();
 		group.setGroupName("New group conversation");
 		group.setCreatedAt(LocalDateTime.now());
 		group.addUser(user1);
@@ -31,8 +31,8 @@ public class GroupService {
 		return groupRepo.save(group);
 	}
 
-	public GroupEntity addUserToExistingGroup(GroupEntity groupEntity, UserEntity newUser) {
-		GroupEntity group = groupRepo.findById(groupEntity.getId())
+	public ChatGroupEntity addUserToExistingGroup(ChatGroupEntity groupEntity, UserEntity newUser) {
+		ChatGroupEntity group = groupRepo.findById(groupEntity.getId())
 				.orElseThrow(() -> new EntityNotFoundException());
 		group.addUser(newUser);
 		return groupRepo.save(group);

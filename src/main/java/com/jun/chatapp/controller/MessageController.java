@@ -5,18 +5,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jun.chatapp.domain.dto.MessageDto;
+import com.jun.chatapp.domain.mapper.MessageMapper;
 import com.jun.chatapp.service.MessageService;
-import com.jun.chatapp.service.MessageServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,9 +20,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MessageController {
 	private final MessageService messageService;
+	private final MessageMapper mapper;
 	
-    public MessageController(MessageService messageService) {
+    public MessageController(MessageService messageService, MessageMapper mapper) {
     	this.messageService = messageService;
+		this.mapper = mapper;
 	}
 
 	@SubscribeMapping("/message")
@@ -38,8 +36,8 @@ public class MessageController {
 	@MessageMapping("/chat")
 	public List<MessageDto> sendMessage(@Payload MessageDto content, Principal principal) {
 		log.debug(content.toString());
-		messageService.saveMessage(content);
-		return messageService.getMessages();
+		messageService.saveMessage(mapper.toMessage(content));
+		return mapper.toMessageDtoList(messageService.getMessages());
 	}
 
     private String addTimestamp() {

@@ -28,6 +28,9 @@ import com.jun.chatapp.controller.util.TestMessageChannel;
 import com.jun.chatapp.controller.util.TestMessageService;
 import com.jun.chatapp.controller.util.TestPrincipal;
 import com.jun.chatapp.domain.dto.MessageDto;
+import com.jun.chatapp.domain.entity.MessageEntity;
+import com.jun.chatapp.domain.mapper.MessageMapper;
+import com.jun.chatapp.domain.mapper.MessageMapperImpl;
 import com.jun.chatapp.service.MessageService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,13 +41,14 @@ public class MessageControllerTest {
 	private TestMessageChannel clientOutboundChannel;
 	private TestAnnotationMethodHandler annotationMethodHandler;
 	private MessageService messageService;
+	private MessageMapper messageMapper;
 	private ObjectMapper mapper;
 
 	@BeforeEach
 	public void setup() {
 		mapper = new ObjectMapper();
 		messageService = new TestMessageService();
-		MessageController controller = new MessageController(messageService);
+		MessageController controller = new MessageController(messageService, new MessageMapperImpl());
 		
 		clientOutboundChannel = new TestMessageChannel();
 		
@@ -98,10 +102,10 @@ public class MessageControllerTest {
 		
 		assertThat(this.messageService.getMessages().size()).isEqualTo(1);
 		
-		List<MessageDto> messages = this.messageService.getMessages();
+		List<MessageEntity> messages = this.messageService.getMessages();
 		assertThat(messages.size()).isEqualTo(1);
 		
-		MessageDto returnedMessage = messages.get(0);
+		MessageEntity returnedMessage = messages.get(0);
 		assertThat(returnedMessage).usingRecursiveComparison()
 			.isEqualTo(mapper.readValue(messageToSend, MessageDto.class));
 	}

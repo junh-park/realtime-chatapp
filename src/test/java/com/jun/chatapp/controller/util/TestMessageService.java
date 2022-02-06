@@ -3,19 +3,21 @@ package com.jun.chatapp.controller.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jun.chatapp.domain.dto.MessageDto;
+import com.jun.chatapp.domain.entity.MessageEntity;
 import com.jun.chatapp.service.MessageService;
 
 public class TestMessageService implements MessageService {
 	
-	private List<MessageDto> messages = new ArrayList<>();
+	private List<MessageEntity> messages = new ArrayList<>();
 	
-	public List<MessageDto> getMessages() {
+	public List<MessageEntity> getMessages() {
 		return messages;
 	}
 
-	public void saveMessage(MessageDto message) {
+
+	@Override
+	public MessageEntity saveMessage(MessageEntity message) {
 		this.messages.add(message);
-		
+		return message;
 	}
 }

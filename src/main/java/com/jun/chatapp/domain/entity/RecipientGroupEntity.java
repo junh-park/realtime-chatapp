@@ -3,6 +3,7 @@ package com.jun.chatapp.domain.entity;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
@@ -26,10 +27,12 @@ public class RecipientGroupEntity {
 	
 	@MapsId("userId")
 	@ManyToOne
+	@JoinColumn(name = "user_id")
 	UserEntity user;
 
 	@MapsId("groupId")
 	@ManyToOne
-	GroupEntity group;
+	@JoinColumn(name = "group_id")
+	ChatGroupEntity group;
 	
 }

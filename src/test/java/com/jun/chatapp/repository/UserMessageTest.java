@@ -51,7 +51,7 @@ public class UserMessageTest {
 				.build();
 		message = MessageEntity.builder()
 				.message("hello I am Jun")
-				.senderId(user.getId())
+				.sender(user)
 				.build();
 		messageRecipient = MessageRecipientEntity.builder()
 			.userId(1).messageId(1)
