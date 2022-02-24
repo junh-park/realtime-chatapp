@@ -33,7 +33,7 @@ public class ChatGroupEntity {
 	@Column(name = "chat_group_id")
 	private int id;
 	private String groupName;
-	@Column(name = "created_at", columnDefinition = "TIMESTAMP")
+	@Column(name = "created_at")
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
@@ -65,6 +65,6 @@ public class ChatGroupEntity {
 		if (!(obj instanceof ChatGroupEntity)) return false;
 		
 		ChatGroupEntity other = (ChatGroupEntity) obj;
-		return (other.getId() == this.getId());
+		return (other.getId() == this.getId() && other.getGroupName().equals(this.getGroupName()));
 	}
 }

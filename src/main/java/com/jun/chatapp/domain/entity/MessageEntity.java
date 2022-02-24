@@ -30,7 +30,7 @@ public class MessageEntity {
 	private int id;
 	
 	private String message;
-	@Column(name = "created_at", columnDefinition = "TIMESTAMP")
+	@Column(name = "created_at")
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 	@Column(name = "sender")
